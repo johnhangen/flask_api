@@ -43,8 +43,9 @@ class helloStockBot(Resource):
     def get(self):
         return {"hello": "world"}
 
-api.add_resource(stock, '/stock/<string:tic>')
 api.add_resource(helloStockBot, '/')
+api.add_resource(stock, '/stock/<string:tic>')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
