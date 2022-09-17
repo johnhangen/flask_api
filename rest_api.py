@@ -1,7 +1,11 @@
 from flask import Flask, jsonify
+import flask.scaffold
+flask.helpers._endpoint_from_view_func = flask.scaffold._endpoint_from_view_func
+from flask_restful import Resource, Api
 from bs4 import BeautifulSoup
 from lxml import etree
 import requests
+import json
 import logging
 from urllib.error import HTTPError, URLError
 from typing import List
@@ -29,14 +33,18 @@ def scrapeStockInfo(id:str = "AAPL") -> List[str]:
 
 
 app = Flask(__name__)
+api = Api(app)
 
-@app.route("/", methods = ['GET', 'POST'])
-def hello():
-    return "To check the price of a stock just add /stock/ and then your stock ticker to the end of the address"
+class stock(Resource):
+    def get(self, tic):
+        return jsonify(scrapeStockInfo(tic))
 
-@app.route('/stocks/<tic>', methods = ['GET'])
-def stockConn(tic):
-    return jsonify(scrapeStockInfo(tic))
+class helloStockBot(Resource):
+    def get(self):
+        return {"hello": "world"}
+
+api.add_resource(stock, '/stock/<string:tic>')
+api.add_resource(helloStockBot, '/')
 
 if __name__ == '__main__':
     app.run(debug=True)
