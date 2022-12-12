@@ -3,6 +3,3 @@ flask_restful
 BeautifulSoup4
 lxml
 requests
-json
-logging
-urllib
